@@ -160,6 +160,8 @@ fn bounds_to_vec<'a, R: RangeBounds<&'a [u8]>>(bounds: R) -> (Bound<Vec<u8>>, Bo
     )
 }
 
+type IteratorInner<'a> = Peekable<btree_map::Range<'a, Vec<u8>, (bool, Vec<u8>)>>;
+
 /// An iterator over (key, value) entries as extracted from a verified proof. If
 /// during iteration we encounter a gap in the data (e.g. the proof did not
 /// include all nodes within the range), the iterator will yield an error.
@@ -167,7 +169,7 @@ pub struct Range<'a> {
     map: &'a Map,
     bounds: (Bound<Vec<u8>>, Bound<Vec<u8>>),
     done: bool,
-    iter: Peekable<btree_map::Range<'a, Vec<u8>, (bool, Vec<u8>)>>,
+    iter: IteratorInner<'a>,
 }
 
 impl<'a> Range<'a> {
